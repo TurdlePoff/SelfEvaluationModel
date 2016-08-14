@@ -6,7 +6,7 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1.04"
         android:id="@+id/relativeLayout"
         android:layout_alignParentStart="false"
@@ -181,10 +181,12 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/linearLayout"
-            android:layout_above="@+id/selectstress"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:weightSum="1"
+            android:layout_above="@+id/selectstress">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -195,84 +197,88 @@
                 android:gravity="center_vertical|center_horizontal"
                 android:layout_below="@+id/linearLayout3"
                 android:layout_alignParentStart="true"
-                android:layout_weight="1">
+                android:layout_weight="0.77">
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="0dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Event Name:"
                     android:id="@+id/SE_OV_evView"
-                    android:layout_weight="0.90"
-                    android:gravity="center_vertical|center_horizontal"
                     android:layout_below="@+id/linearLayout7"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.21" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="8dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Mood:"
                     android:id="@+id/SE_OV_mdView"
                     android:layout_alignBottom="@+id/linearLayout7"
                     android:layout_centerHorizontal="true"
                     android:gravity="center_vertical|center_horizontal"
-                    android:layout_weight="1" />
+                    android:layout_gravity="center"
+                    android:layout_weight="0.19" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="8dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Thoughts:"
                     android:id="@+id/SE_OV_thView"
                     android:layout_below="@+id/SE_OV_bodView"
                     android:layout_toEndOf="@+id/SE_OV_mdView"
                     android:gravity="center_vertical|center_horizontal"
-                    android:layout_weight="1" />
+                    android:layout_gravity="center"
+                    android:layout_weight="0.19" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="8dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Physical Pain:"
                     android:id="@+id/SE_OV_bodView"
                     android:layout_centerVertical="true"
                     android:layout_alignStart="@+id/editEvent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|center_horizontal" />
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.19" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="8dp"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="Heart Beat:"
                     android:id="@+id/SE_OV_hbView"
-                    android:gravity="center_vertical|center_horizontal"
                     android:layout_alignBottom="@+id/linearLayout5"
                     android:layout_alignStart="@+id/editEvent"
-                    android:layout_weight="1" />
+                    android:gravity="center_vertical|center_horizontal"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.19" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_width="194dp"
+                android:layout_height="match_parent">
 
                 <EditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:hint="Insert event name"
                     android:id="@+id/SE_OV_editEventName"
                     android:gravity="center_vertical|center_horizontal"
                     android:layout_alignBottom="@+id/linearLayout"
                     android:layout_alignParentEnd="true"
-                    android:layout_weight="0.36" />
+                    android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Click on Mood tab"
                     android:id="@+id/SE_OV_mood"
@@ -282,27 +288,28 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Click on Thoughts tab"
                     android:id="@+id/SE_OV_thoughts"
                     android:layout_weight="1"
                     android:gravity="center_vertical|center_horizontal"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:text="Click on thoughts tab" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Click on Physical pain tab"
+                    android:text="No Physical Pain"
                     android:id="@+id/SE_OV_pain"
+                    android:hint="No Physical Pain"
                     android:layout_weight="1"
                     android:gravity="center_vertical|center_horizontal"
                     android:textSize="14dp" />
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Heart beat detection status"
                     android:id="@+id/SE_OV_heartbeat"

@@ -2,6 +2,7 @@ package thinkfeelact.android.selfevaluationmodel.SelfEvaluationModel;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -10,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import java.util.ArrayList;
 
 
 public class SelfEvaluationActivity extends Activity implements View.OnClickListener{
@@ -24,7 +27,8 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
     ImageButton img_headButton, img_upperLButton, img_upperRButton, img_chestButton, img_lowerLButton;
     ImageButton img_lowerRButton, img_lowerBButton, img_legButton, img_feetButton;
     ToggleButton headButton, chestButton, upArmButton, handButton, lowBodButton, legsButton, feetButton;
-    ToggleButton[] tbArray;
+    ToggleButton[] tbArray; ImageButton[] bodyImgArray;
+    ArrayList<String> bodTexts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +40,16 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         mood = (ToggleButton) findViewById(R.id.moodButton);
         thoughts = (ToggleButton) findViewById(R.id.thoughtsButton);
         body = (ToggleButton) findViewById(R.id.bodyButton);
+        heartBeat = (ToggleButton) findViewById(R.id.heartBeatButton);
         overview.setOnClickListener(this);mood.setOnClickListener(this);thoughts.setOnClickListener(this);body.setOnClickListener(this);
+        heartBeat.setOnClickListener(this);
 
         overviewLayout = findViewById(R.id.overviewLayout);
         moodLayout = findViewById(R.id.moodLayout);
         thoughtsLayout = findViewById(R.id.thoughtsLayout);
         bodyLayout = findViewById(R.id.bodyLayout);
-        ov_moodText = (TextView) findViewById(R.id.SE_OV_mood);ov_bodyText = (TextView) findViewById(R.id.SE_OV_pain);
+        ov_moodText = (TextView) findViewById(R.id.SE_OV_mood);
+        ov_bodyText = (TextView) findViewById(R.id.SE_OV_pain);
         ov_thoughtsText = (TextView) findViewById(R.id.SE_OV_thoughts);
         thoughtEdit = (EditText) findViewById(R.id.SE_THOUGHTS_desc);
 
@@ -85,11 +92,23 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
 
         tbArray = new ToggleButton[]{headButton, chestButton,
                 upArmButton, lowBodButton, handButton, legsButton, feetButton};
+        bodyImgArray = new ImageButton[]{img_headButton, img_upperLButton, img_chestButton,
+                img_lowerLButton, img_lowerBButton, img_legButton, img_feetButton};
+        ov_bodyText.setText("Click on Physical Pain tab");
+
+
+        //MUST INCLUDE | buttons do not work on first click otherwise
+        for(ImageButton eachButton : bodyImgArray){
+            eachButton.performClick();
+        }
+
     }
 
 
     @Override
     public void onClick(View v) {
+        String listOfBody;
+        bodTexts = null; bodTexts = new ArrayList<>();
         int buttonPressed = v.getId();
         if(buttonPressed==R.id.overviewButton||buttonPressed==R.id.thoughtsButton
                 ||buttonPressed==R.id.bodyButton||buttonPressed==R.id.moodButton){
@@ -99,6 +118,33 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             mood.setChecked(false); mood.setBackgroundResource(R.drawable.del_button_border);
             thoughts.setChecked(false); thoughts.setBackgroundResource(R.drawable.del_button_border);
             body.setChecked(false); body.setBackgroundResource(R.drawable.del_button_border);
+        }
+
+
+
+        for(ToggleButton eachButton : tbArray){
+            String currentText = eachButton.getText().toString();
+            if(eachButton.isChecked()){
+                if(!bodTexts.contains(currentText))
+                bodTexts.add(currentText);
+            }else{
+                if(bodTexts.contains(currentText))
+                bodTexts.remove(currentText);
+            }
+        }
+
+        if(thoughtEdit.getText().length()!=0){
+            ov_thoughtsText.setText(thoughtEdit.getEditableText().toString());
+        }else{
+            ov_thoughtsText.setText("Click on thoughts tab");
+            ov_thoughtsText.setHint("eg. I twisted my right ankle today. It hurt a lot so i will need to get it checked out");
+        }
+
+        if(ov_bodyText.getText().length()==0){
+            ov_bodyText.setText("No Physical Pain");
+        }else{
+            listOfBody = TextUtils.join(", ", bodTexts);
+            ov_bodyText.setText(listOfBody);
         }
 
         switch (buttonPressed) {
@@ -308,6 +354,8 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     feetButton.setChecked(false);
                 }
                 break;
+
+
         }
     }
 }
