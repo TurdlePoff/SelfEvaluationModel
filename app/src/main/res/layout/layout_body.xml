@@ -78,6 +78,9 @@
                         android:src="@drawable/upper_leftarm1"
                         android:tag="upper_leftarm1"
                         android:layout_row="1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="false"
+                        android:clickable="true"
                         android:layout_column="0"
                         android:layout_gravity="center|right|fill"
                         android:padding="0dp"
@@ -94,6 +97,9 @@
                         android:layout_toEndOf="@+id/ic_upperLButton"
                         android:src="@drawable/body1"
                         android:tag="body1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="false"
+                        android:clickable="true"
                         android:layout_row="1"
                         android:layout_column="1"
                         android:layout_gravity="center|fill"
@@ -113,6 +119,9 @@
                         android:id="@+id/ic_upperRButton"
                         android:src="@drawable/upper_rightarm1"
                         android:tag="upper_rightarm1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="false"
+                        android:clickable="true"
                         android:layout_above="@+id/ic_lowerLButton"
                         android:layout_toEndOf="@+id/ic_chestButton"
                         android:layout_row="1"
@@ -134,6 +143,9 @@
                         android:layout_toStartOf="@+id/ic_chestButton"
                         android:layout_row="2"
                         android:layout_column="0"
+                        android:focusable="true"
+                        android:focusableInTouchMode="false"
+                        android:clickable="true"
                         android:padding="0dp"
                         android:background="@null"
                         android:scaleType="fitXY"
@@ -152,6 +164,9 @@
                         android:layout_column="1"
                         android:layout_gravity="center|fill"
                         android:padding="0dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="false"
+                        android:clickable="true"
                         android:background="@null"
                         android:scaleType="fitXY"
                         android:adjustViewBounds="true"
@@ -167,6 +182,9 @@
                         android:layout_row="2"
                         android:layout_column="2"
                         android:layout_gravity="top|center|fill"
+                        android:focusable="true"
+                        android:focusableInTouchMode="false"
+                        android:clickable="true"
                         android:padding="0dp"
                         android:background="@null"
                         android:scaleType="fitXY"
@@ -182,6 +200,9 @@
                         android:layout_row="4"
                         android:layout_column="1"
                         android:layout_gravity="center|fill"
+                        android:focusable="true"
+                        android:focusableInTouchMode="false"
+                        android:clickable="true"
                         android:src="@drawable/feet1"
                         android:padding="0dp"
                         android:background="@null"
@@ -195,6 +216,9 @@
                         android:id="@+id/ic_legsButton"
                         android:layout_row="3"
                         android:layout_column="1"
+                        android:focusable="true"
+                        android:focusableInTouchMode="false"
+                        android:clickable="true"
                         android:src="@drawable/legs1"
                         android:layout_gravity="center|fill"
                         android:padding="0dp"
@@ -234,24 +258,16 @@
                 <ToggleButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="All"
-                    android:id="@+id/SE_BODY_allButton"
-                    android:background="@drawable/item_button_border"
-                    android:textColor="#ffffff"
-                    android:layout_weight="1"
-                    android:textOn="ALL"
-                    android:textOff="ALL" />
-
-                <ToggleButton
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:text="Head"
                     android:id="@+id/SE_BODY_headButton"
                     android:background="@drawable/item_button_border"
                     android:textColor="#ffffff"
                     android:layout_weight="1"
                     android:textOff="HEAD"
-                    android:textOn="HEAD" />
+                    android:textOn="HEAD"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"/>
 
                 <ToggleButton
                     android:layout_width="match_parent"
@@ -264,7 +280,10 @@
                     android:layout_weight="1"
                     android:textOn="Chest/Abdomen"
                     android:checked="false"
-                    android:textOff="Chest/Abdomen" />
+                    android:textOff="Chest/Abdomen"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"/>
 
                 <ToggleButton
                     android:layout_width="match_parent"
@@ -277,7 +296,10 @@
                     android:layout_weight="1"
                     android:checked="false"
                     android:textOff="Arms"
-                    android:textOn="Arms" />
+                    android:textOn="Arms"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"/>
 
                 <ToggleButton
                     android:layout_width="match_parent"
@@ -290,7 +312,10 @@
                     android:layout_weight="1"
                     android:checked="false"
                     android:textOn="Hands"
-                    android:textOff="Hands" />
+                    android:textOff="Hands"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"/>
 
                 <ToggleButton
                     android:layout_width="match_parent"
@@ -303,7 +328,10 @@
                     android:layout_weight="1"
                     android:checked="false"
                     android:textOff="lower body"
-                    android:textOn="lower body" />
+                    android:textOn="lower body"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"/>
 
                 <ToggleButton
                     android:layout_width="match_parent"
@@ -316,7 +344,10 @@
                     android:layout_weight="1"
                     android:checked="false"
                     android:textOff="Legs"
-                    android:textOn="Legs" />
+                    android:textOn="Legs"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"/>
 
                 <ToggleButton
                     android:layout_width="match_parent"
@@ -328,7 +359,10 @@
                     android:layout_weight="1"
                     android:checked="false"
                     android:textOn="feet"
-                    android:textOff="feet" />
+                    android:textOff="feet"
+                    android:focusable="true"
+                    android:focusableInTouchMode="false"
+                    android:clickable="true"/>
             </LinearLayout>
 
         </LinearLayout>

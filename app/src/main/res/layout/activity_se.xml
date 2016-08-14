@@ -91,11 +91,11 @@
         android:layout_height="wrap_content"
         layout="@layout/layout_mood"
         android:id="@+id/moodLayout"
-        android:visibility="gone"
+        android:visibility="invisible"
         android:layout_below="@+id/linearLayout6"
+        android:focusable="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-
         android:layout_alignParentStart="true" />
 
     <include
@@ -103,7 +103,8 @@
         android:layout_height="wrap_content"
         layout="@layout/layout_overview"
         android:id="@+id/overviewLayout"
-        android:visibility="gone"
+        android:visibility="visible"
+        android:focusable="true"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/linearLayout6" />
 
@@ -113,6 +114,9 @@
         layout="@layout/layout_body"
         android:id="@+id/bodyLayout"
         android:layout_below="@+id/linearLayout6"
+        android:onClick="bodyFragment"
+        android:visibility="invisible"
+        android:focusable="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
 
@@ -124,7 +128,8 @@
         android:layout_below="@+id/linearLayout6"
         android:layout_alignParentStart="true"
         android:layout_marginTop="24dp"
-        android:visibility="gone"
+        android:visibility="invisible"
+        android:focusable="true"
         android:layout_alignParentEnd="true" />
     <!--android:visibility="gone"-->
 
