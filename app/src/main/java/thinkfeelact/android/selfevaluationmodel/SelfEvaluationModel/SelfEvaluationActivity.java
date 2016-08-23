@@ -1,13 +1,19 @@
 package thinkfeelact.android.selfevaluationmodel.SelfEvaluationModel;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.media.Rating;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -18,11 +24,12 @@ import java.util.ArrayList;
 public class SelfEvaluationActivity extends Activity implements View.OnClickListener{
 
     ToggleButton overview, mood, thoughts, body, heartBeat;
-    View overviewLayout, moodLayout, thoughtsLayout, bodyLayout, heartBeatLayout;
+    View overviewLayout, scroll_overview, moodLayout, thoughtsLayout, bodyLayout, heartBeatLayout;
+    View SE_OVERVIEW_moodLayout, SE_OVERVIEW_bodyLayout, SE_OVERVIEW_thoughtsLayout;
+    RatingBar ratingBar;
     ImageButton m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15,m16;
     ImageView moodImgView;
-    TextView moodTextView, ov_moodText, ov_thoughtsText, ov_bodyText;
-    EditText thoughtEdit;
+    TextView moodTextView, ov_moodText, ov_thoughtsText, ov_bodyText, ratingText, thoughtEdit;
     //physical pain body buttons
     ImageButton img_headButton, img_upperLButton, img_upperRButton, img_chestButton, img_lowerLButton;
     ImageButton img_lowerRButton, img_lowerBButton, img_legButton, img_feetButton;
@@ -45,15 +52,21 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         heartBeat.setOnClickListener(this);
 
         overviewLayout = findViewById(R.id.overviewLayout);
+        scroll_overview = findViewById(R.id.scroll_overview);
         moodLayout = findViewById(R.id.moodLayout);
         thoughtsLayout = findViewById(R.id.thoughtsLayout);
         bodyLayout = findViewById(R.id.bodyLayout);
         ov_moodText = (TextView) findViewById(R.id.SE_OV_mood);
         ov_bodyText = (TextView) findViewById(R.id.SE_OV_pain);
         ov_thoughtsText = (TextView) findViewById(R.id.SE_OV_thoughts);
-        thoughtEdit = (EditText) findViewById(R.id.SE_THOUGHTS_desc);
+        thoughtEdit = (TextView) findViewById(R.id.SE_THOUGHTS_desc);
 
-
+        SE_OVERVIEW_moodLayout = findViewById(R.id.SE_OVERVIEW_moodLayout);
+        SE_OVERVIEW_bodyLayout = findViewById(R.id.SE_OVERVIEW_bodyPain);
+        SE_OVERVIEW_thoughtsLayout = findViewById(R.id.SE_OVERVIEW_thoughts);
+        SE_OVERVIEW_moodLayout.setOnClickListener(this);
+        SE_OVERVIEW_bodyLayout.setOnClickListener(this);
+        SE_OVERVIEW_thoughtsLayout.setOnClickListener(this);
 
         //====================MOOD SECTION=====================================
         m1 = (ImageButton) findViewById(R.id.SE_MOOD_m1Button); m2 = (ImageButton) findViewById(R.id.SE_MOOD_m2Button);
@@ -94,7 +107,27 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 upArmButton, lowBodButton, handButton, legsButton, feetButton};
         bodyImgArray = new ImageButton[]{img_headButton, img_upperLButton, img_chestButton,
                 img_lowerLButton, img_lowerBButton, img_legButton, img_feetButton};
-        ov_bodyText.setText("Click on Physical Pain tab");
+
+        //=========================RATING=====================================
+        ratingBar = (RatingBar) findViewById(R.id.SE_OVERVIEW_StressRating);
+        ratingText = (TextView) findViewById(R.id.ratingText);
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if(rating >= 8)
+                    ratingText.setTextColor(Color.parseColor("#ff484b"));
+                else if(rating < 8 && rating >= 5)
+                    ratingText.setTextColor(Color.parseColor("#ffa14a"));
+                else
+                    ratingText.setTextColor(Color.parseColor("#40d973"));
+                ratingText.setText("Rating: " + rating);
+            }
+        });
+
+        setupUI(findViewById(R.id.SE_OV_editEventName));
+        setupUI(findViewById(R.id.SE_OV_editEventName));
+
 
 
         //MUST INCLUDE | buttons do not work on first click otherwise
@@ -104,6 +137,41 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
 
     }
 
+//    public void moodUpdate(ImageView imgView, TextView txtV,){
+//        imgView.setImageResource(R.drawable.ic_negative_thoughts);//set image name strings
+//        txtV.setText("Dwelling on negative thoughts");
+//        ov_moodText.setText("Dwelling on negative thoughts");
+//    }
+
+    public void setupUI(View view) {
+
+        // Set up touch listener for non-text box views to hide keyboard.
+        if (!(view instanceof EditText)) {
+            view.setOnTouchListener(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    hideSoftKeyboard(SelfEvaluationActivity.this);
+                    return false;
+                }
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View innerView = ((ViewGroup) view).getChildAt(i);
+                setupUI(innerView);
+            }
+        }
+    }
+
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
 
     @Override
     public void onClick(View v) {
@@ -111,15 +179,16 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         bodTexts = null; bodTexts = new ArrayList<>();
         int buttonPressed = v.getId();
         if(buttonPressed==R.id.overviewButton||buttonPressed==R.id.thoughtsButton
-                ||buttonPressed==R.id.bodyButton||buttonPressed==R.id.moodButton){
-            overviewLayout.setVisibility(View.INVISIBLE);moodLayout.setVisibility(View.INVISIBLE);
+                || buttonPressed==R.id.bodyButton||buttonPressed==R.id.moodButton
+                || buttonPressed==R.id.SE_OVERVIEW_bodyPain || buttonPressed==R.id.SE_OVERVIEW_thoughts
+                || buttonPressed==R.id.SE_OVERVIEW_moodLayout){
+            scroll_overview.setVisibility(View.INVISIBLE);moodLayout.setVisibility(View.INVISIBLE);
             thoughtsLayout.setVisibility(View.INVISIBLE);bodyLayout.setVisibility(View.INVISIBLE);
             overview.setChecked(false); overview.setBackgroundResource(R.drawable.del_button_border);
             mood.setChecked(false); mood.setBackgroundResource(R.drawable.del_button_border);
             thoughts.setChecked(false); thoughts.setBackgroundResource(R.drawable.del_button_border);
             body.setChecked(false); body.setBackgroundResource(R.drawable.del_button_border);
         }
-
 
 
         for(ToggleButton eachButton : tbArray){
@@ -137,6 +206,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             ov_thoughtsText.setText(thoughtEdit.getEditableText().toString());
         }else{
             ov_thoughtsText.setText("Click on thoughts tab");
+            ov_thoughtsText.setTextColor(Color.parseColor("#e45287"));
             ov_thoughtsText.setHint("eg. I twisted my right ankle today. It hurt a lot so i will need to get it checked out");
         }
 
@@ -149,22 +219,24 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
 
         switch (buttonPressed) {
             case R.id.overviewButton:
-                overviewLayout.setVisibility(View.VISIBLE);
+                scroll_overview.setVisibility(View.VISIBLE);
                 overview.setChecked(true);
                 overview.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.moodButton:
-                Log.e("BEFORE SWITCH THING", "ALLBUTTON IS: " + mood.isChecked() +" "+ mood.getTag());
+            case R.id.SE_OVERVIEW_moodLayout:
                 moodLayout.setVisibility(View.VISIBLE);
                 mood.setChecked(true);
                 mood.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.thoughtsButton:
+            case R.id.SE_OVERVIEW_thoughts:
                 thoughtsLayout.setVisibility(View.VISIBLE);
                 thoughts.setChecked(true);
                 thoughts.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.bodyButton:
+            case R.id.SE_OVERVIEW_bodyPain:
                 bodyLayout.setVisibility(View.VISIBLE);
                 body.setChecked(true);
                 body.setBackgroundResource(R.drawable.sel_button_border);
@@ -354,7 +426,6 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     feetButton.setChecked(false);
                 }
                 break;
-
 
         }
     }

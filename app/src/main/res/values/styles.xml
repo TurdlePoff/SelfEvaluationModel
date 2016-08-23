@@ -8,5 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="SERatingBar" parent="@style/Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@android:drawable/btn_star_big_off</item>
+        <item name="android:minHeight">22dip</item>
+        <item name="android:maxHeight">22dip</item>
+    </style>
 
 </resources>

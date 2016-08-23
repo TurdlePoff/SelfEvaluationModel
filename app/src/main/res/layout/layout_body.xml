@@ -17,14 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Select the painful areas of your body\nby clicking on the body or a button"
+            android:text="Select the painful areas of your body\n Tap on a section of the body or trying selecting a button"
             android:id="@+id/textView2"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_weight="0.77"
             android:layout_gravity="center"
             android:textAlignment="gravity"
-            android:gravity="center_vertical|center_horizontal" />
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_margin="15dp" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -242,7 +243,6 @@
                 <ToggleButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Head"
                     android:id="@+id/SE_BODY_headButton"
                     android:background="@drawable/item_button_border"
                     android:textColor="#ffffff"
@@ -251,7 +251,8 @@
                     android:textOn="Head"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:checked="false" />
+                    android:checked="false"
+                    android:text="Head" />
 
                 <ToggleButton
                     android:layout_width="match_parent"

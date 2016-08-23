@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">SelfEvaluationModel</string>
+
+    <!--<moods-array-->
+        <!--name = "mood_names">-->
+        <!--<item>Content</item>-->
+        <!--<item>Happy</item>-->
+        <!--<item>Sad</item>-->
+        <!--<item>Sick</item>-->
+        <!--<item>Dwelling on negative thoughts</item>-->
+        <!--<item>On the verge of crying</item>-->
+        <!--<item>Crying</item>-->
+        <!--<item>Frustrated</item>-->
+        <!--<item>Unenthusiastic</item>-->
+        <!--<item>Worried/Nervous</item>-->
+        <!--<item>Annoyed</item>-->
+        <!--<item>Angry/Furious</item>-->
+        <!--<item>Embarrassed/Shy</item>-->
+        <!--<item>Confused</item>-->
+        <!--<item>Shocked/Surprised</item>-->
+        <!--<item>Scared</item>-->
+    <!--</moods-array>-->
 </resources>
