@@ -107,21 +107,29 @@
                             android:paddingStart="15dp"
                             android:backgroundTint="#ff4855" />
 
-                        <TextView
+                        <LinearLayout
+                            android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:id="@+id/SE_OV_mood"
-                            android:gravity="center_vertical"
-                            android:textSize="14dp"
-                            android:hint="Click on Mood tab"
-                            android:paddingStart="15dp"
-                            android:textColorHint="#f00000" />
+                            android:layout_height="wrap_content">
 
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:id="@+id/SE_OVERVIEW_moodImgView" />
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:id="@+id/SE_OVERVIEW_moodImgView" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:id="@+id/SE_OV_mood"
+                                android:gravity="center_vertical"
+                                android:textSize="14dp"
+                                android:hint="Click on Mood tab"
+                                android:textColorHint="#f00000"
+                                android:layout_weight="3"
+                                android:textAlignment="center" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -200,7 +208,8 @@
                         android:textSize="14dp"
                         android:paddingStart="15dp"
                         android:layout_weight="0.40"
-                        android:textColorHint="#f00000" />
+                        android:textColorHint="#f00000"
+                        android:textColor="#f00000" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -240,7 +249,8 @@
                         android:hint="Click on thoughts tab"
                         android:paddingStart="15dp"
                         android:textColorHint="#f00000"
-                        android:layout_weight="0.20" />
+                        android:layout_weight="0.20"
+                        android:textColor="#f00000" />
                 </LinearLayout>
 
             </LinearLayout>

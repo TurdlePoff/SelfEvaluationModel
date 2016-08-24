@@ -1,6 +1,7 @@
 package thinkfeelact.android.selfevaluationmodel.SelfEvaluationModel;
 
 import android.app.Activity;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.media.Rating;
 import android.os.Bundle;
@@ -21,27 +22,26 @@ import android.widget.ToggleButton;
 import java.util.ArrayList;
 
 
-public class SelfEvaluationActivity extends Activity implements View.OnClickListener{
+public class SelfEvaluationActivity extends Activity implements View.OnClickListener, View.OnTouchListener{
 
     ToggleButton overview, mood, thoughts, body, heartBeat;
     View overviewLayout, scroll_overview, moodLayout, thoughtsLayout, bodyLayout, heartBeatLayout;
     View SE_OVERVIEW_moodLayout, SE_OVERVIEW_bodyLayout, SE_OVERVIEW_thoughtsLayout;
     RatingBar ratingBar;
     ImageButton m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15,m16;
-    ImageView moodImgView;
+    ImageView moodImgView, ov_ImgView;
     TextView moodTextView, ov_moodText, ov_thoughtsText, ov_bodyText, ratingText, thoughtEdit;
     //physical pain body buttons
     ImageButton img_headButton, img_upperLButton, img_upperRButton, img_chestButton, img_lowerLButton;
     ImageButton img_lowerRButton, img_lowerBButton, img_legButton, img_feetButton;
     ToggleButton headButton, chestButton, upArmButton, handButton, lowBodButton, legsButton, feetButton;
-    ToggleButton[] tbArray; ImageButton[] bodyImgArray;
-    ArrayList<String> bodTexts;
+    ToggleButton[] tbArray; ImageButton[] bodyImgArray, moodArray;
+    ArrayList<String> bodTexts; String[] moodNames; TypedArray moodIDs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_se);
-
         //=======================OVERVIEW SECTION=====================================
         overview = (ToggleButton) findViewById(R.id.overviewButton);
         mood = (ToggleButton) findViewById(R.id.moodButton);
@@ -60,6 +60,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         ov_bodyText = (TextView) findViewById(R.id.SE_OV_pain);
         ov_thoughtsText = (TextView) findViewById(R.id.SE_OV_thoughts);
         thoughtEdit = (TextView) findViewById(R.id.SE_THOUGHTS_desc);
+        ov_ImgView = (ImageView) findViewById(R.id.SE_OVERVIEW_moodImgView);
 
         SE_OVERVIEW_moodLayout = findViewById(R.id.SE_OVERVIEW_moodLayout);
         SE_OVERVIEW_bodyLayout = findViewById(R.id.SE_OVERVIEW_bodyPain);
@@ -67,6 +68,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         SE_OVERVIEW_moodLayout.setOnClickListener(this);
         SE_OVERVIEW_bodyLayout.setOnClickListener(this);
         SE_OVERVIEW_thoughtsLayout.setOnClickListener(this);
+
 
         //====================MOOD SECTION=====================================
         m1 = (ImageButton) findViewById(R.id.SE_MOOD_m1Button); m2 = (ImageButton) findViewById(R.id.SE_MOOD_m2Button);
@@ -107,6 +109,9 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 upArmButton, lowBodButton, handButton, legsButton, feetButton};
         bodyImgArray = new ImageButton[]{img_headButton, img_upperLButton, img_chestButton,
                 img_lowerLButton, img_lowerBButton, img_legButton, img_feetButton};
+        moodArray = new ImageButton[]{m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16};
+        moodNames = getResources().getStringArray(R.array.mood_names);
+        moodIDs = getResources().obtainTypedArray(R.array.moodIDs);
 
         //=========================RATING=====================================
         ratingBar = (RatingBar) findViewById(R.id.SE_OVERVIEW_StressRating);
@@ -125,11 +130,6 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             }
         });
 
-        setupUI(findViewById(R.id.SE_OV_editEventName));
-        setupUI(findViewById(R.id.SE_OV_editEventName));
-
-
-
         //MUST INCLUDE | buttons do not work on first click otherwise
         for(ImageButton eachButton : bodyImgArray){
             eachButton.performClick();
@@ -143,35 +143,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
 //        ov_moodText.setText("Dwelling on negative thoughts");
 //    }
 
-    public void setupUI(View view) {
 
-        // Set up touch listener for non-text box views to hide keyboard.
-        if (!(view instanceof EditText)) {
-            view.setOnTouchListener(new View.OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(SelfEvaluationActivity.this);
-                    return false;
-                }
-            });
-        }
-
-        //If a layout container, iterate over children and seed recursion.
-        if (view instanceof ViewGroup) {
-            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-                View innerView = ((ViewGroup) view).getChildAt(i);
-                setupUI(innerView);
-            }
-        }
-    }
-
-
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) activity.getSystemService(
-                        Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(
-                activity.getCurrentFocus().getWindowToken(), 0);
-    }
 
     @Override
     public void onClick(View v) {
@@ -190,6 +162,16 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             body.setChecked(false); body.setBackgroundResource(R.drawable.del_button_border);
         }
 
+        for(int i = 0; i < moodArray.length; i++){
+            if(buttonPressed == moodArray[i].getId()) {
+                ov_ImgView.requestLayout();
+                ov_ImgView.getLayoutParams().height = 150;
+                moodTextView.setText(moodNames[i]);
+                ov_moodText.setText(moodNames[i]);
+                moodImgView.setImageResource(moodIDs.getResourceId(i, -1));
+                ov_ImgView.setImageResource(moodIDs.getResourceId(i, -1));
+            }
+        }
 
         for(ToggleButton eachButton : tbArray){
             String currentText = eachButton.getText().toString();
@@ -206,7 +188,6 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             ov_thoughtsText.setText(thoughtEdit.getEditableText().toString());
         }else{
             ov_thoughtsText.setText("Click on thoughts tab");
-            ov_thoughtsText.setTextColor(Color.parseColor("#e45287"));
             ov_thoughtsText.setHint("eg. I twisted my right ankle today. It hurt a lot so i will need to get it checked out");
         }
 
@@ -243,86 +224,6 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 break;
             case R.id.heartBeatButton:
                 Toast.makeText(SelfEvaluationActivity.this, "Heart beat not available", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.SE_MOOD_m1Button:
-                moodImgView.setImageResource(R.drawable.ic_content);
-                moodTextView.setText("Content/Just right");
-                ov_moodText.setText("Content/Just right");
-                break;
-            case R.id.SE_MOOD_m2Button:
-                moodImgView.setImageResource(R.drawable.ic_happy);
-                moodTextView.setText("Happy");
-                ov_moodText.setText("Happy");
-                break;
-            case R.id.SE_MOOD_m3Button:
-                moodImgView.setImageResource(R.drawable.ic_sad);
-                moodTextView.setText("Sad");
-                ov_moodText.setText("Sad");
-                break;
-            case R.id.SE_MOOD_m4Button:
-                moodImgView.setImageResource(R.drawable.ic_sick);
-                moodTextView.setText("Sick");
-                ov_moodText.setText("Sick");
-                break;
-            case R.id.SE_MOOD_m5Button:
-                moodImgView.setImageResource(R.drawable.ic_negative_thoughts);
-                moodTextView.setText("Dwelling on negative thoughts");
-                ov_moodText.setText("Dwelling on negative thoughts");
-                break;
-            case R.id.SE_MOOD_m6Button:
-                moodImgView.setImageResource(R.drawable.ic_feellikecrying);
-                moodTextView.setText("Feeling like crying");
-                ov_moodText.setText("Feeling like crying");
-                break;
-            case R.id.SE_MOOD_m7Button:
-                moodImgView.setImageResource(R.drawable.ic_crying);
-                moodTextView.setText("Crying");
-                ov_moodText.setText("Crying");
-                break;
-            case R.id.SE_MOOD_m8Button:
-                moodImgView.setImageResource(R.drawable.ic_frustrated_tpoc);
-                moodTextView.setText("Frustrated");
-                ov_moodText.setText("Frustrated");
-                break;
-            case R.id.SE_MOOD_m9Button:
-                moodImgView.setImageResource(R.drawable.ic_meh);
-                moodTextView.setText("Meh");
-                ov_moodText.setText("Meh");
-                break;
-            case R.id.SE_MOOD_m10Button:
-                moodImgView.setImageResource(R.drawable.ic_worriednervous);
-                moodTextView.setText("Worried/Nervous");
-                ov_moodText.setText("Worried/Nervous");
-                break;
-            case R.id.SE_MOOD_m11Button:
-                moodImgView.setImageResource(R.drawable.ic_annoyed);
-                moodTextView.setText("Annoyed");
-                ov_moodText.setText("Annoyed");
-                break;
-            case R.id.SE_MOOD_m12Button:
-                moodImgView.setImageResource(R.drawable.ic_angry);
-                moodTextView.setText("Angry/Furious");
-                ov_moodText.setText("Angry/Furious");
-                break;
-            case R.id.SE_MOOD_m13Button:
-                moodImgView.setImageResource(R.drawable.ic_embarrassed);
-                moodTextView.setText("Embarrassed");
-                ov_moodText.setText("Embarrassed");
-                break;
-            case R.id.SE_MOOD_m14Button:
-                moodImgView.setImageResource(R.drawable.ic_confused);
-                moodTextView.setText("Confused");
-                ov_moodText.setText("Confused");
-                break;
-            case R.id.SE_MOOD_m15Button:
-                moodImgView.setImageResource(R.drawable.ic_shocked);
-                moodTextView.setText("Shocked/Surprised");
-                ov_moodText.setText("Shocked/Surprised");
-                break;
-            case R.id.SE_MOOD_m16Button:
-                moodImgView.setImageResource(R.drawable.ic_scared);
-                moodTextView.setText("Scared");
-                ov_moodText.setText("Scared");
                 break;
             case (R.id.ic_headButton):
             case (R.id.SE_BODY_headButton):
@@ -428,5 +329,12 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 break;
 
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        return true;
     }
 }
