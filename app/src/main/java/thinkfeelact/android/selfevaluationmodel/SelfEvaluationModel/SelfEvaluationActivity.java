@@ -11,9 +11,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 
 public class SelfEvaluationActivity extends Activity implements View.OnClickListener, View.OnTouchListener{
 
+    ListView list;MoodList adapter;
     ToggleButton overview, mood, thoughts, body, heartBeat;
     View overviewLayout, scroll_overview, moodLayout, thoughtsLayout, bodyLayout, heartBeatLayout;
     View SE_OVERVIEW_moodLayout, SE_OVERVIEW_bodyLayout, SE_OVERVIEW_thoughtsLayout;
@@ -134,6 +137,20 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         for(ImageButton eachButton : bodyImgArray){
             eachButton.performClick();
         }
+
+
+//        adapter = new MoodList(SelfEvaluationActivity.this, moodNames, moodIDs);
+//        list = (ListView) findViewById(R.id.mood_listView);
+//        list.setAdapter(adapter);
+//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+//                Toast.makeText(SelfEvaluationActivity.this, "You Clicked at " +moodNames[+ position], Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
 
     }
 
