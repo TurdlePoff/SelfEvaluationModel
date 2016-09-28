@@ -1,105 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:weightSum="1"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Write a description of your thoughts for this event"
+            android:id="@+id/textView"
+            android:layout_gravity="center"
+            android:textAlignment="center" />
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="158dp"
-                android:layout_height="251dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="125dp"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="How am I feeling? What happened?"
-                    android:id="@+id/textView26"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:background="@drawable/cloud"
-                    android:textColor="#ffffff"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
-                    android:backgroundTint="#7baffe"
-                    android:layout_weight="1"
-                    android:paddingTop="5dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Write a description of your thoughts on what happened during this event"
-                    android:id="@+id/textView27"
-                    android:layout_weight="1"
-                    android:textAlignment="gravity"
-                    android:gravity="center_vertical|center_horizontal" />
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="152dp"
-                android:layout_height="243dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView2"
-                    android:src="@drawable/plainbody"
-                    android:layout_weight="1"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true" />
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="13dp"
-                    android:id="@+id/imageView4"
-                    android:backgroundTint="#7baefd"
-                    android:background="@drawable/cloud2"
-                    android:layout_marginTop="37dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_toEndOf="@+id/imageView3"
-                    android:layout_marginStart="8dp" />
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="15dp"
-                    android:id="@+id/imageView3"
-                    android:backgroundTint="#7baefd"
-                    android:background="@drawable/cloud2"
-                    android:layout_below="@+id/imageView4"
-                    android:layout_alignParentStart="true" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_gravity="center"
+        android:textAlignment="center">
 
         <EditText
-            android:layout_width="394dp"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:ems="10"
+            android:layout_width="match_parent"
+            android:layout_height="298dp"
             android:id="@+id/SE_THOUGHTS_desc"
-            android:hint="eg. I twisted my right ankle today. It hurt a lot so i will need to get it checked out"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp" />
+            android:layout_gravity="center_horizontal"
+            android:hint="eg. I twisted my foot while walking down a flight of stairs. It hurts a lot so I will need to get it checked out."
+            android:background="@android:drawable/editbox_background"
+            android:padding="20dp"
+            android:layout_margin="15dp"
+            android:nestedScrollingEnabled="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:weightSum="1"
+        android:background="@android:drawable/edit_text"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Try to answer the following questions in your description:"
+            android:id="@+id/textView6"
+            android:layout_gravity="center_horizontal"
+            android:textAlignment="center"
+            android:background="@android:drawable/editbox_background"
+            android:textColor="#ffffff"
+            android:backgroundTint="#ff4855"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="What happened? \nHow did it happen?\nHow do you feel?\nWhat will you do now?"
+            android:id="@+id/textView5"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:layout_weight="1" />
     </LinearLayout>
 
 </LinearLayout>
