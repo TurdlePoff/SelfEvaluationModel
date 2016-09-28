@@ -58,7 +58,8 @@
                     android:layout_margin="5dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="15dp"
-                    android:foreground="@drawable/textbox_border">
+                    android:foreground="@drawable/textbox_border"
+                    android:background="@android:drawable/editbox_background">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -69,7 +70,6 @@
                         android:layout_below="@+id/linearLayout7"
                         android:layout_alignParentEnd="true"
                         android:gravity="center_vertical"
-                        android:background="@android:drawable/editbox_background"
                         android:textSize="18dp"
                         android:textColor="#2d2d2d"
                         android:paddingEnd="15dp"
@@ -85,28 +85,27 @@
                         android:layout_alignBottom="@+id/linearLayout"
                         android:layout_alignParentEnd="true"
                         android:textSize="14dp"
-                        android:textColorHint="?android:attr/colorControlNormal"
                         android:paddingStart="15dp"
-                        android:background="@android:drawable/editbox_background"
-                        android:textColor="?android:attr/colorControlNormal" />
+                        android:background="@android:drawable/editbox_background"/>
                 </LinearLayout>
 
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:foreground="@drawable/textbox_border"
                     android:layout_margin="5dp"
-                    android:weightSum="1">
+                    android:weightSum="1"
+                    android:background="@android:drawable/editbox_background"
+                    android:id="@+id/ov_moodSection">
 
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:id="@+id/SE_OVERVIEW_moodLayout"
                         android:backgroundTint="@android:color/background_light"
-                        android:background="@android:drawable/editbox_background"
                         android:weightSum="1">
 
                         <TextView
@@ -120,32 +119,33 @@
                             android:textColor="#2d2d2d"
                             android:paddingEnd="15dp"
                             android:textAlignment="textStart"
-                            android:paddingStart="5dp"
-                            android:layout_height="43dp"
+                            android:paddingStart="15dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.70"
                             android:gravity="center_vertical"
                             android:onClick="onClick" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:id="@+id/SE_OV_mood"
+                            android:gravity="center_vertical"
+                            android:textSize="14dp"
+                            android:hint="Click on Mood tab"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="0.77"
+                            android:paddingStart="15dp"
+                            android:paddingBottom="5dp" />
+
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:id="@+id/SE_OV_mood"
-                        android:gravity="center_vertical"
-                        android:textSize="14dp"
-                        android:hint="Click on Mood tab"
-                        android:textColorHint="?android:attr/colorControlNormal"
-                        android:textAlignment="textStart"
-                        android:textColor="?android:attr/colorControlNormal"
-                        android:paddingBottom="5dp"
-                        android:layout_marginTop="5dp" />
-
                     <ImageView
-                        android:layout_width="72dp"
-                        android:layout_height="61dp"
-                        android:id="@+id/SE_OVERVIEW_moodImgView" />
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/SE_OVERVIEW_moodImgView"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp" />
 
                 </LinearLayout>
 
@@ -156,7 +156,8 @@
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
                     android:id="@+id/SE_OVERVIEW_bodyPain"
-                    android:foreground="@drawable/textbox_border">
+                    android:foreground="@drawable/textbox_border"
+                    android:background="@android:drawable/editbox_background">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -184,8 +185,6 @@
                         android:gravity="center_vertical"
                         android:textSize="14dp"
                         android:paddingStart="15dp"
-                        android:textColorHint="?android:attr/colorControlNormal"
-                        android:textColor="?android:attr/colorControlNormal"
                         android:paddingBottom="5dp" />
                 </LinearLayout>
 
@@ -197,7 +196,8 @@
                     android:layout_margin="5dp"
                     android:layout_weight="0.56"
                     android:id="@+id/SE_OVERVIEW_thoughts"
-                    android:foreground="@drawable/textbox_border">
+                    android:foreground="@drawable/textbox_border"
+                    android:background="@android:drawable/editbox_background">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -220,14 +220,42 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:id="@+id/SE_OV_thoughts"
+                        android:id="@+id/SE_OV_thoughtsWhat"
                         android:gravity="center_vertical"
                         android:textSize="14dp"
-                        android:hint="Click on thoughts tab"
                         android:paddingStart="15dp"
-                        android:textColorHint="?android:attr/colorControlNormal"
-                        android:textColor="?android:attr/colorControlNormal"
-                        android:paddingBottom="5dp" />
+                        android:paddingBottom="5dp"
+                        android:hint="What happened?" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2px"
+                        android:background="@android:color/darker_gray"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/SE_OV_thoughtsWhyHow"
+                        android:gravity="center_vertical"
+                        android:textSize="14dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="15dp"
+                        android:paddingBottom="5dp"
+                        android:hint="Why/How did it happen?" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2px"
+                        android:background="@android:color/darker_gray"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/SE_OV_thoughtsFeel"
+                        android:gravity="center_vertical"
+                        android:textSize="14dp"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="15dp"
+                        android:paddingBottom="5dp"
+                        android:hint="How am I feeling?" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -239,7 +267,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:foreground="@drawable/textbox_border">
+            android:foreground="@drawable/textbox_border"
+            android:background="@android:drawable/editbox_background">
 
             <TextView
                 android:layout_width="match_parent"

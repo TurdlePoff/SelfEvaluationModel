@@ -27,12 +27,14 @@ import java.util.ArrayList;
 public class SelfEvaluationActivity extends Activity implements View.OnClickListener, View.OnTouchListener{
 
     ToggleButton overview, mood, thoughts, body;
-    View overviewLayout, scroll_overview, moodLayout, thoughtsLayout, bodyLayout;
+    View overviewLayout, moodLayout, thoughtsLayout, bodyLayout, moodLayoutSection;
+    View scroll_overview, scroll_thoughts;
     View SE_OVERVIEW_moodLayout, SE_OVERVIEW_bodyLayout, SE_OVERVIEW_thoughtsLayout;
     RatingBar ratingBar;
     ImageButton m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15,m16;
     ImageView moodImgView, ov_ImgView;
-    TextView moodTextView, ov_moodText, ov_thoughtsText, ov_bodyText, ratingText, thoughtEdit;
+    TextView moodTextView, ov_moodText, ov_bodyText, ratingText;
+    TextView thoughtWhatEdit, thoughtWhyHowEdit, thoughtFeelEdit, ov_thoughtsWhat, ov_thoughtsWhyHow, ov_thoughtsFeel;
     //physical pain body buttons
     ImageButton img_headButton, img_upperLButton, img_upperRButton, img_chestButton, img_lowerLButton;
     ImageButton img_lowerRButton, img_lowerBButton, img_legButton, img_feetButton;
@@ -55,14 +57,22 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         body.setOnClickListener(this);
 
         overviewLayout = findViewById(R.id.overviewLayout);
+        moodLayoutSection = findViewById(R.id.ov_moodSection);
         scroll_overview = findViewById(R.id.scroll_overview);
+        scroll_thoughts = findViewById(R.id.scroll_thoughts);
         moodLayout = findViewById(R.id.moodLayout);
         thoughtsLayout = findViewById(R.id.thoughtsLayout);
         bodyLayout = findViewById(R.id.bodyLayout);
         ov_moodText = (TextView) findViewById(R.id.SE_OV_mood);
         ov_bodyText = (TextView) findViewById(R.id.SE_OV_pain);
-        ov_thoughtsText = (TextView) findViewById(R.id.SE_OV_thoughts);
-        thoughtEdit = (TextView) findViewById(R.id.SE_THOUGHTS_desc);
+
+        ov_thoughtsWhat = (TextView) findViewById(R.id.SE_OV_thoughtsWhat);
+        ov_thoughtsWhyHow = (TextView) findViewById(R.id.SE_OV_thoughtsWhyHow);
+        ov_thoughtsFeel = (TextView) findViewById(R.id.SE_OV_thoughtsFeel);
+
+        thoughtWhatEdit = (TextView) findViewById(R.id.SE_THOUGHTS_what);
+        thoughtWhyHowEdit = (TextView) findViewById(R.id.SE_THOUGHTS_whyhow);
+        thoughtFeelEdit = (TextView) findViewById(R.id.SE_THOUGHTS_feel);
         ov_ImgView = (ImageView) findViewById(R.id.SE_OVERVIEW_moodImgView);
 
         SE_OVERVIEW_moodLayout = findViewById(R.id.SE_OVERVIEW_moodLayout);
@@ -199,13 +209,13 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             }
         }
 
-        if(thoughtEdit.getText().length()!=0){
-            ov_thoughtsText.setText(thoughtEdit.getEditableText().toString());
-        }else{
-            ov_thoughtsText.setText("Click on thoughts tab");
-            ov_thoughtsText.setHint("eg. I twisted my right ankle today. It hurt a lot so i will need to get it checked out");
-        }
+        // SET WHAT, WHYHOW AND FEEL TEXTS TO OVERVIEW TEXT SECTION
+        ov_thoughtsWhat.setText("What happened: " + thoughtWhatEdit.getEditableText().toString());
+        ov_thoughtsWhyHow.setText("Why/How did it happen: " + thoughtWhyHowEdit.getEditableText().toString());
+        ov_thoughtsFeel.setText("How I am feeling: " + thoughtFeelEdit.getEditableText().toString());
 
+
+        //CHECKS IF ANY SELECTION IS MADE ON THE IMAGE BODY
         boolean bodyCheck = false;
         for(ToggleButton bodyBoxItem : tbArray){
             if(bodyBoxItem.isChecked())
@@ -229,12 +239,24 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 || buttonPressed==R.id.bodyButton||buttonPressed==R.id.moodButton
                 || buttonPressed==R.id.SE_OVERVIEW_bodyPain || buttonPressed==R.id.SE_OVERVIEW_thoughts
                 || buttonPressed==R.id.SE_OVERVIEW_moodLayout){
-            scroll_overview.setVisibility(View.INVISIBLE);moodLayout.setVisibility(View.INVISIBLE);
-            thoughtsLayout.setVisibility(View.INVISIBLE);bodyLayout.setVisibility(View.INVISIBLE);
+            moodLayout.setVisibility(View.INVISIBLE); thoughtsLayout.setVisibility(View.INVISIBLE);
+            bodyLayout.setVisibility(View.INVISIBLE); scroll_thoughts.setVisibility(View.INVISIBLE);
+            scroll_overview.setVisibility(View.INVISIBLE);
             overview.setChecked(false); overview.setBackgroundResource(R.drawable.del_button_border);
             mood.setChecked(false); mood.setBackgroundResource(R.drawable.del_button_border);
             thoughts.setChecked(false); thoughts.setBackgroundResource(R.drawable.del_button_border);
             body.setChecked(false); body.setBackgroundResource(R.drawable.del_button_border);
+        }
+
+        for(int i = 0; i < moodArray.length; i++){
+            if(buttonPressed == moodArray[i].getId()) {
+                ov_ImgView.requestLayout();
+                ov_ImgView.getLayoutParams().height = 150;
+                moodTextView.setText(moodNames[i]);
+                ov_moodText.setText(moodNames[i]);
+                moodImgView.setImageResource(moodIDs.getResourceId(i, -1));
+                ov_ImgView.setImageResource(moodIDs.getResourceId(i, -1));
+            }
         }
 
         setOverviewDescriptions();
@@ -246,6 +268,8 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 overview.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.moodButton:
+            case R.id.ov_moodSection:
+            case R.id.SE_OVERVIEW_moodImgView:
             case R.id.SE_OVERVIEW_moodLayout:
                 moodLayout.setVisibility(View.VISIBLE);
                 mood.setChecked(true);
@@ -253,6 +277,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 break;
             case R.id.thoughtsButton:
             case R.id.SE_OVERVIEW_thoughts:
+                scroll_thoughts.setVisibility(View.VISIBLE);
                 thoughtsLayout.setVisibility(View.VISIBLE);
                 thoughts.setChecked(true);
                 thoughts.setBackgroundResource(R.drawable.sel_button_border);
@@ -269,13 +294,13 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     img_headButton.setImageResource(R.drawable.head2);
                     img_headButton.setTag("head2");
                     headButton.setChecked(true);
-                    headButton.setBackgroundResource(R.drawable.item2_button_border);
+                    headButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     Log.e(headButton.getTextOff().toString(), "CHECK: "+headButton.isChecked());
                 }else{
                     img_headButton.setImageResource(R.drawable.head1);
                     img_headButton.setTag("head1");
                     headButton.setChecked(false);
-                    headButton.setBackgroundResource(R.drawable.item_button_border);
+                    headButton.setBackgroundResource(R.drawable.body_button_border);
                 }
                 break;
             case (R.id.ic_chestButton):
@@ -284,12 +309,12 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     img_chestButton.setImageResource(R.drawable.body2);
                     img_chestButton.setTag("body2");
                     chestButton.setChecked(true);
-                    chestButton.setBackgroundResource(R.drawable.item2_button_border);
+                    chestButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     Log.e(chestButton.getTextOff().toString(), "CHECK: "+chestButton.isChecked());
                 }else{
                     img_chestButton.setImageResource(R.drawable.body1);img_chestButton.setTag("body1");
                     chestButton.setChecked(false);
-                    chestButton.setBackgroundResource(R.drawable.item_button_border);
+                    chestButton.setBackgroundResource(R.drawable.body_button_border);
                 }
                 break;
             case (R.id.ic_upperLButton):
@@ -299,7 +324,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     img_upperLButton.setImageResource(R.drawable.upper_leftarm2);img_upperLButton.setTag("upper_leftarm2");
                     img_upperRButton.setImageResource(R.drawable.upper_rightarm2);img_upperLButton.setTag("upper_rightarm2");
                     upArmButton.setChecked(true);
-                    upArmButton.setBackgroundResource(R.drawable.item2_button_border);
+                    upArmButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     Log.e(upArmButton.getTextOff().toString(), "CHECK: "+upArmButton.isChecked());
                 }else{
                     img_upperLButton.setImageResource(R.drawable.upper_leftarm1);
@@ -307,7 +332,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     img_upperRButton.setImageResource(R.drawable.upper_rightarm1);
                     img_upperRButton.setTag("upper_rightarm1");
                     upArmButton.setChecked(false);
-                    upArmButton.setBackgroundResource(R.drawable.item_button_border);
+                    upArmButton.setBackgroundResource(R.drawable.body_button_border);
                 }
                 break;
             case (R.id.ic_lowerLButton):
@@ -317,13 +342,13 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     img_lowerLButton.setImageResource(R.drawable.lower_lefthand2);img_lowerLButton.setTag("lower_lefthand2");
                     img_lowerRButton.setImageResource(R.drawable.lower_righthand2);img_lowerRButton.setTag("lower_righthand2");
                     handButton.setChecked(true);
-                    handButton.setBackgroundResource(R.drawable.item2_button_border);
+                    handButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     Log.e(handButton.getTextOff().toString(), "CHECK: "+handButton.isChecked());
                 }else{
                     img_lowerLButton.setImageResource(R.drawable.lower_lefthand1); img_lowerLButton.setTag("lower_lefthand1");
                     img_lowerRButton.setImageResource(R.drawable.lower_righthand1); img_lowerRButton.setTag("lower_righthand1");
                     handButton.setChecked(false);
-                    handButton.setBackgroundResource(R.drawable.item_button_border);
+                    handButton.setBackgroundResource(R.drawable.body_button_border);
                 }
                 break;
             case(R.id.ic_lowerBodyButton):
@@ -331,11 +356,11 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 if(String.valueOf(img_lowerBButton.getTag())=="lower_body1"){
                     img_lowerBButton.setImageResource(R.drawable.lower_body2);img_lowerBButton.setTag("lower_body2");
                     lowBodButton.setChecked(true);
-                    lowBodButton.setBackgroundResource(R.drawable.item2_button_border);
+                    lowBodButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     Log.e(lowBodButton.getTextOff().toString(), "CHECK: "+lowBodButton.isChecked());
                 }else{
                     img_lowerBButton.setImageResource(R.drawable.lower_body1); img_lowerBButton.setTag("lower_body1");
-                    lowBodButton.setBackgroundResource(R.drawable.item_button_border);
+                    lowBodButton.setBackgroundResource(R.drawable.body_button_border);
                     lowBodButton.setChecked(false);
                 }
                 break;
@@ -343,12 +368,12 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             case (R.id.SE_BODY_legButton):
                 if(String.valueOf(img_legButton.getTag())=="legs1"){
                     img_legButton.setImageResource(R.drawable.legs2);img_legButton.setTag("legs2");
-                    legsButton.setBackgroundResource(R.drawable.item2_button_border);
+                    legsButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     legsButton.setChecked(true);
                     Log.e(legsButton.getTextOff().toString(), "CHECK: "+legsButton.isChecked());
                 }else{
                     img_legButton.setImageResource(R.drawable.legs1); img_legButton.setTag("legs1");
-                    legsButton.setBackgroundResource(R.drawable.item_button_border);
+                    legsButton.setBackgroundResource(R.drawable.body_button_border);
                     legsButton.setChecked(false);
                 }
                 break;
@@ -356,12 +381,12 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             case (R.id.SE_BODY_feetButton):
                 if(String.valueOf(img_feetButton.getTag())=="feet1"){
                     img_feetButton.setImageResource(R.drawable.feet2);img_feetButton.setTag("feet2");
-                    feetButton.setBackgroundResource(R.drawable.item2_button_border);
+                    feetButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     feetButton.setChecked(true);
                     Log.e(feetButton.getTextOff().toString(), "CHECK: "+feetButton.isChecked());
                 }else{
                     img_feetButton.setImageResource(R.drawable.feet1); img_feetButton.setTag("feet1");
-                    feetButton.setBackgroundResource(R.drawable.item_button_border);
+                    feetButton.setBackgroundResource(R.drawable.body_button_border);
                     feetButton.setChecked(false);
                 }
                 break;
