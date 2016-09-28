@@ -17,15 +17,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Select the painful areas of your body"
-            android:id="@+id/textView2"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_weight="0.77"
-            android:layout_gravity="center"
-            android:textAlignment="gravity"
+            android:text="What kind body pains do you have?"
+            android:id="@+id/textView8"
             android:gravity="center_vertical|center_horizontal"
-            android:layout_margin="15dp" />
+            android:textColor="@android:color/white"
+            android:layout_above="@+id/SE_OV_stressBar"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:background="@android:drawable/editbox_background"
+            android:backgroundTint="?attr/colorPrimary"
+            android:layout_weight="0.09"
+            android:layout_marginBottom="20dp" />
 
         <LinearLayout
             android:orientation="horizontal"

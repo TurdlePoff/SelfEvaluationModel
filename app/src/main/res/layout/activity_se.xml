@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -23,20 +24,9 @@
             android:background="@drawable/sel_button_border"
             android:textOff="Overview"
             android:textOn="Overview"
-            android:checked="true" />
+            android:checked="true"
+            android:textSize="16sp" />
 
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:id="@+id/heartBeatButton"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/overviewButton"
-            android:layout_weight="1.0"
-            android:background="@drawable/del_button_border"
-            android:checked="false"
-            android:textOn="Heart Beat"
-            android:textOff="Heart Beat" />
     </LinearLayout>
 
     <LinearLayout
@@ -57,7 +47,8 @@
             android:background="@drawable/del_button_border"
             android:checked="false"
             android:textOff="Mood"
-            android:textOn="Mood" />
+            android:textOn="Mood"
+            android:textSize="16sp" />
 
 
         <ToggleButton
@@ -70,7 +61,8 @@
             android:background="@drawable/del_button_border"
             android:checked="false"
             android:textOff="Thoughts"
-            android:textOn="Thoughts" />
+            android:textOn="Thoughts"
+            android:textSize="16sp" />
 
         <ToggleButton
             android:layout_width="wrap_content"
@@ -82,7 +74,8 @@
             android:background="@drawable/del_button_border"
             android:checked="false"
             android:textOff="Physical Pain"
-            android:textOn="Physical Pain" />
+            android:textOn="Physical Pain"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
