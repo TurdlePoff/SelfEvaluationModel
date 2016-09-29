@@ -58,7 +58,6 @@
                     android:layout_margin="5dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="15dp"
-                    android:foreground="@drawable/textbox_border"
                     android:background="@android:drawable/editbox_background">
 
                     <TextView
@@ -79,6 +78,8 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
                         android:hint="Insert event name"
                         android:id="@+id/SE_OV_editEventName"
                         android:gravity="center_vertical"
@@ -93,7 +94,6 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:foreground="@drawable/textbox_border"
                     android:layout_margin="5dp"
                     android:weightSum="1"
                     android:background="@android:drawable/editbox_background"
@@ -141,11 +141,11 @@
                     </LinearLayout>
 
                     <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="65dp"
+                        android:layout_height="66dp"
                         android:id="@+id/SE_OVERVIEW_moodImgView"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp" />
+                        android:foregroundGravity="left|center_horizontal"
+                        android:layout_weight="0.07" />
 
                 </LinearLayout>
 
@@ -156,7 +156,6 @@
                     android:layout_gravity="center"
                     android:layout_margin="5dp"
                     android:id="@+id/SE_OVERVIEW_bodyPain"
-                    android:foreground="@drawable/textbox_border"
                     android:background="@android:drawable/editbox_background">
 
                     <TextView
@@ -196,7 +195,6 @@
                     android:layout_margin="5dp"
                     android:layout_weight="0.56"
                     android:id="@+id/SE_OVERVIEW_thoughts"
-                    android:foreground="@drawable/textbox_border"
                     android:background="@android:drawable/editbox_background">
 
                     <TextView
@@ -267,7 +265,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
-            android:foreground="@drawable/textbox_border"
             android:background="@android:drawable/editbox_background">
 
             <TextView

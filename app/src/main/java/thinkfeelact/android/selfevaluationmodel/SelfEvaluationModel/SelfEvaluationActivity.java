@@ -1,6 +1,7 @@
 package thinkfeelact.android.selfevaluationmodel.SelfEvaluationModel;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.media.Rating;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -24,7 +26,7 @@ import android.widget.ToggleButton;
 import java.util.ArrayList;
 
 
-public class SelfEvaluationActivity extends Activity implements View.OnClickListener, View.OnTouchListener{
+public class SelfEvaluationActivity extends Activity implements View.OnClickListener{
 
     ToggleButton overview, mood, thoughts, body;
     View overviewLayout, moodLayout, thoughtsLayout, bodyLayout, moodLayoutSection;
@@ -34,7 +36,9 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
     ImageButton m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15,m16;
     ImageView moodImgView, ov_ImgView;
     TextView moodTextView, ov_moodText, ov_bodyText, ratingText;
-    TextView thoughtWhatEdit, thoughtWhyHowEdit, thoughtFeelEdit, ov_thoughtsWhat, ov_thoughtsWhyHow, ov_thoughtsFeel;
+    TextView ov_thoughtsWhat, ov_thoughtsWhyHow, ov_thoughtsFeel;
+    EditText thoughtWhatEdit, thoughtWhyHowEdit, thoughtFeelEdit, eventNameEdit, searchEditText;
+    EditText[] editArray;
     //physical pain body buttons
     ImageButton img_headButton, img_upperLButton, img_upperRButton, img_chestButton, img_lowerLButton;
     ImageButton img_lowerRButton, img_lowerBButton, img_legButton, img_feetButton;
@@ -70,9 +74,11 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         ov_thoughtsWhyHow = (TextView) findViewById(R.id.SE_OV_thoughtsWhyHow);
         ov_thoughtsFeel = (TextView) findViewById(R.id.SE_OV_thoughtsFeel);
 
-        thoughtWhatEdit = (TextView) findViewById(R.id.SE_THOUGHTS_what);
-        thoughtWhyHowEdit = (TextView) findViewById(R.id.SE_THOUGHTS_whyhow);
-        thoughtFeelEdit = (TextView) findViewById(R.id.SE_THOUGHTS_feel);
+        thoughtWhatEdit = (EditText) findViewById(R.id.SE_THOUGHTS_what);
+        thoughtWhyHowEdit = (EditText) findViewById(R.id.SE_THOUGHTS_whyhow);
+        thoughtFeelEdit = (EditText) findViewById(R.id.SE_THOUGHTS_feel);
+        eventNameEdit = (EditText) findViewById(R.id.editEvent);
+
         ov_ImgView = (ImageView) findViewById(R.id.SE_OVERVIEW_moodImgView);
 
         SE_OVERVIEW_moodLayout = findViewById(R.id.SE_OVERVIEW_moodLayout);
@@ -156,11 +162,13 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         legsButton.setOnClickListener(this);
         feetButton.setOnClickListener(this);
 
+        editArray = new EditText[]{thoughtWhyHowEdit, thoughtWhatEdit, thoughtFeelEdit, eventNameEdit};
         tbArray = new ToggleButton[]{headButton, chestButton,
                 upArmButton, lowBodButton, handButton, legsButton, feetButton};
         bodyImgArray = new ImageButton[]{img_headButton, img_upperLButton, img_chestButton,
                 img_lowerLButton, img_lowerBButton, img_legButton, img_feetButton};
         moodArray = new ImageButton[]{m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16};
+
         moodNames = getResources().getStringArray(R.array.mood_names);
         moodIDs = getResources().obtainTypedArray(R.array.moodIDs);
 
@@ -186,6 +194,8 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         for (ImageButton eachButton : bodyImgArray) {
             eachButton.performClick();
         }
+
+
     }
 
 
@@ -210,9 +220,9 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         }
 
         // SET WHAT, WHYHOW AND FEEL TEXTS TO OVERVIEW TEXT SECTION
-        ov_thoughtsWhat.setText("What happened: " + thoughtWhatEdit.getEditableText().toString());
-        ov_thoughtsWhyHow.setText("Why/How did it happen: " + thoughtWhyHowEdit.getEditableText().toString());
-        ov_thoughtsFeel.setText("How I am feeling: " + thoughtFeelEdit.getEditableText().toString());
+        ov_thoughtsWhat.setText("What happened: \n" + thoughtWhatEdit.getEditableText().toString());
+        ov_thoughtsWhyHow.setText("Why/How did it happen: \n" + thoughtWhyHowEdit.getEditableText().toString());
+        ov_thoughtsFeel.setText("How I am feeling: \n" + thoughtFeelEdit.getEditableText().toString());
 
 
         //CHECKS IF ANY SELECTION IS MADE ON THE IMAGE BODY
@@ -233,6 +243,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
+
         bodTexts = null; bodTexts = new ArrayList<>();
         int buttonPressed = v.getId();
         if(buttonPressed==R.id.overviewButton||buttonPressed==R.id.thoughtsButton
@@ -248,6 +259,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             body.setChecked(false); body.setBackgroundResource(R.drawable.del_button_border);
         }
 
+
         for(int i = 0; i < moodArray.length; i++){
             if(buttonPressed == moodArray[i].getId()) {
                 ov_ImgView.requestLayout();
@@ -258,21 +270,21 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 ov_ImgView.setImageResource(moodIDs.getResourceId(i, -1));
             }
         }
-
         setOverviewDescriptions();
 
         switch (buttonPressed) {
             case R.id.overviewButton:
                 scroll_overview.setVisibility(View.VISIBLE);
                 overview.setChecked(true);
+                hideKeyboard();
                 overview.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.moodButton:
-            case R.id.ov_moodSection:
             case R.id.SE_OVERVIEW_moodImgView:
             case R.id.SE_OVERVIEW_moodLayout:
                 moodLayout.setVisibility(View.VISIBLE);
                 mood.setChecked(true);
+                hideKeyboard();
                 mood.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.thoughtsButton:
@@ -280,12 +292,14 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 scroll_thoughts.setVisibility(View.VISIBLE);
                 thoughtsLayout.setVisibility(View.VISIBLE);
                 thoughts.setChecked(true);
+                hideKeyboard();
                 thoughts.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.bodyButton:
             case R.id.SE_OVERVIEW_bodyPain:
                 bodyLayout.setVisibility(View.VISIBLE);
                 body.setChecked(true);
+                hideKeyboard();
                 body.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case (R.id.ic_headButton):
@@ -394,10 +408,13 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         }
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    public boolean hideKeyboard() {
+        View focused = getCurrentFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Activity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
         return true;
     }
+
+
 }
