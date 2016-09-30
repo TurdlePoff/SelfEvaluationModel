@@ -17,15 +17,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Select the painful areas of your body"
-            android:id="@+id/textView2"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_weight="0.77"
-            android:layout_gravity="center"
-            android:textAlignment="gravity"
+            android:text="Select parts of your body that hurt"
+            android:id="@+id/textView8"
             android:gravity="center_vertical|center_horizontal"
-            android:layout_margin="15dp" />
+            android:textColor="@android:color/white"
+            android:layout_above="@+id/SE_OV_stressBar"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:background="@android:drawable/editbox_background"
+            android:backgroundTint="?attr/colorPrimary"
+            android:layout_weight="0.09"
+            android:layout_marginBottom="20dp"
+            android:textSize="22sp" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -244,7 +247,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/SE_BODY_headButton"
-                    android:background="@drawable/item_button_border"
                     android:textColor="#ffffff"
                     android:layout_weight="1"
                     android:textOff="Head"
@@ -252,22 +254,23 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:checked="false"
-                    android:text="Head" />
+                    android:text="Head"
+                    android:background="@drawable/body_button_border" />
 
                 <ToggleButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Chest/Abdomen"
+                    android:text="Upper Body"
                     android:id="@+id/SE_BODY_chestButton"
                     android:layout_gravity="right"
-                    android:background="@drawable/item_button_border"
                     android:textColor="#ffffff"
                     android:layout_weight="1"
-                    android:textOn="Chest/Abdomen"
+                    android:textOn="Upper Body"
                     android:checked="false"
-                    android:textOff="Chest/Abdomen"
+                    android:textOff="Upper Body"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:focusableInTouchMode="false"
+                    android:background="@drawable/body_button_border" />
 
                 <ToggleButton
                     android:layout_width="match_parent"
@@ -275,14 +278,14 @@
                     android:text="Arms"
                     android:id="@+id/SE_BODY_armButton"
                     android:layout_gravity="right"
-                    android:background="@drawable/item_button_border"
                     android:textColor="#ffffff"
                     android:layout_weight="1"
                     android:checked="false"
                     android:textOff="Arms"
                     android:textOn="Arms"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:focusableInTouchMode="false"
+                    android:background="@drawable/body_button_border" />
 
                 <ToggleButton
                     android:layout_width="match_parent"
@@ -290,14 +293,14 @@
                     android:text="Hands"
                     android:id="@+id/SE_BODY_handButton"
                     android:layout_gravity="right"
-                    android:background="@drawable/item_button_border"
                     android:textColor="#ffffff"
                     android:layout_weight="1"
                     android:checked="false"
                     android:textOn="Hands"
                     android:textOff="Hands"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:focusableInTouchMode="false"
+                    android:background="@drawable/body_button_border" />
 
                 <ToggleButton
                     android:layout_width="match_parent"
@@ -305,14 +308,14 @@
                     android:text="Lower body"
                     android:id="@+id/SE_BODY_lowBodyButton"
                     android:layout_gravity="right"
-                    android:background="@drawable/item_button_border"
                     android:textColor="#ffffff"
                     android:layout_weight="1"
                     android:checked="false"
-                    android:textOff="lower body"
-                    android:textOn="lower body"
+                    android:textOn="Lower Body"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:focusableInTouchMode="false"
+                    android:textOff="Lower Body"
+                    android:background="@drawable/body_button_border" />
 
                 <ToggleButton
                     android:layout_width="match_parent"
@@ -320,28 +323,28 @@
                     android:text="Legs"
                     android:id="@+id/SE_BODY_legButton"
                     android:layout_gravity="right"
-                    android:background="@drawable/item_button_border"
                     android:textColor="#ffffff"
                     android:layout_weight="1"
                     android:checked="false"
                     android:textOff="Legs"
                     android:textOn="Legs"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:focusableInTouchMode="false"
+                    android:background="@drawable/body_button_border" />
 
                 <ToggleButton
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Feet"
                     android:id="@+id/SE_BODY_feetButton"
-                    android:background="@drawable/item_button_border"
                     android:textColor="#ffffff"
                     android:layout_weight="1"
                     android:checked="false"
-                    android:textOn="feet"
-                    android:textOff="feet"
+                    android:textOn="Feet"
+                    android:textOff="Feet"
                     android:focusable="false"
-                    android:focusableInTouchMode="false"/>
+                    android:focusableInTouchMode="false"
+                    android:background="@drawable/body_button_border" />
             </LinearLayout>
 
         </LinearLayout>

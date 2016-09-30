@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/mainLayout">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -23,20 +25,9 @@
             android:background="@drawable/sel_button_border"
             android:textOff="Overview"
             android:textOn="Overview"
-            android:checked="true" />
+            android:checked="true"
+            android:textSize="16sp" />
 
-        <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#ffffff"
-            android:id="@+id/heartBeatButton"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/overviewButton"
-            android:layout_weight="1.0"
-            android:background="@drawable/del_button_border"
-            android:checked="false"
-            android:textOn="Heart Beat"
-            android:textOff="Heart Beat" />
     </LinearLayout>
 
     <LinearLayout
@@ -57,7 +48,8 @@
             android:background="@drawable/del_button_border"
             android:checked="false"
             android:textOff="Mood"
-            android:textOn="Mood" />
+            android:textOn="Mood"
+            android:textSize="16sp" />
 
 
         <ToggleButton
@@ -70,7 +62,8 @@
             android:background="@drawable/del_button_border"
             android:checked="false"
             android:textOff="Thoughts"
-            android:textOn="Thoughts" />
+            android:textOn="Thoughts"
+            android:textSize="16sp" />
 
         <ToggleButton
             android:layout_width="wrap_content"
@@ -82,9 +75,28 @@
             android:background="@drawable/del_button_border"
             android:checked="false"
             android:textOff="Physical Pain"
-            android:textOn="Physical Pain" />
+            android:textOn="Physical Pain"
+            android:textSize="16sp" />
 
     </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scroll_thoughts"
+        android:layout_below="@+id/linearLayout6">
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/layout_thoughts"
+            android:id="@+id/thoughtsLayout"
+            android:layout_alignParentStart="true"
+            android:visibility="invisible"
+            android:focusable="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/moodLayout" />
+    </ScrollView>
 
     <include
         android:layout_width="wrap_content"
@@ -109,17 +121,6 @@
         android:focusable="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true" />
-
-    <include
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        layout="@layout/layout_thoughts"
-        android:id="@+id/thoughtsLayout"
-        android:layout_alignParentStart="true"
-        android:visibility="invisible"
-        android:focusable="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/moodLayout" />
 
     <ScrollView
         android:layout_width="match_parent"
