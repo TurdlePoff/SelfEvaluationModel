@@ -5,15 +5,19 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.media.Rating;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,6 +33,8 @@ import java.util.ArrayList;
 public class SelfEvaluationActivity extends Activity implements View.OnClickListener{
 
     ToggleButton overview, mood, thoughts, body;
+    Button addEvent, noPain;
+    String thoughtString;
     View overviewLayout, moodLayout, thoughtsLayout, bodyLayout, moodLayoutSection;
     View scroll_overview, scroll_thoughts;
     View SE_OVERVIEW_moodLayout, SE_OVERVIEW_bodyLayout, SE_OVERVIEW_thoughtsLayout;
@@ -45,12 +51,16 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
     ToggleButton headButton, chestButton, upArmButton, handButton, lowBodButton, legsButton, feetButton;
     ToggleButton[] tbArray; ImageButton[] bodyImgArray, moodArray;
     ArrayList<String> bodTexts; String[] moodNames; TypedArray moodIDs;
+    Context context;
+    boolean noPainButtonClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_se);
         //=======================OVERVIEW SECTION=====================================
+        addEvent = (Button) findViewById(R.id.SE_OV_addEventButton);
+        addEvent.setOnClickListener(this);
         overview = (ToggleButton) findViewById(R.id.overviewButton);
         mood = (ToggleButton) findViewById(R.id.moodButton);
         thoughts = (ToggleButton) findViewById(R.id.thoughtsButton);
@@ -59,6 +69,8 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         mood.setOnClickListener(this);
         thoughts.setOnClickListener(this);
         body.setOnClickListener(this);
+        context = this;
+        noPain = (Button) findViewById(R.id.noPainButton); noPain.setOnClickListener(this);
 
         overviewLayout = findViewById(R.id.overviewLayout);
         moodLayoutSection = findViewById(R.id.ov_moodSection);
@@ -195,6 +207,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             eachButton.performClick();
         }
 
+        noPainButtonClicked = false;
 
     }
 
@@ -205,56 +218,103 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
      *  gets an array of all the values from body, mood and thoughts
      *  and adds them to the over description
      */
-    public void setOverviewDescriptions(){
-        String listOfBodySelections;
-
-        for(ToggleButton eachButton : tbArray){
-            String currentText = eachButton.getText().toString();
-            if(eachButton.isChecked()){
-                if(!bodTexts.contains(currentText))
-                    bodTexts.add(currentText);
-            }else{
-                if(bodTexts.contains(currentText))
-                    bodTexts.remove(currentText);
-            }
-        }
-
+    public void setOverviewDescriptions() {
         // SET WHAT, WHYHOW AND FEEL TEXTS TO OVERVIEW TEXT SECTION
         ov_thoughtsWhat.setText("What happened: \n" + thoughtWhatEdit.getEditableText().toString());
         ov_thoughtsWhyHow.setText("Why/How did it happen: \n" + thoughtWhyHowEdit.getEditableText().toString());
         ov_thoughtsFeel.setText("How I am feeling: \n" + thoughtFeelEdit.getEditableText().toString());
 
 
+        String listOfBodySelections;
+
+        for (ToggleButton eachButton : tbArray) {
+            String currentText = eachButton.getText().toString();
+            if (eachButton.isChecked()) {
+                if (!bodTexts.contains(currentText))
+                    bodTexts.add(currentText);
+            } else {
+                if (bodTexts.contains(currentText))
+                    bodTexts.remove(currentText);
+            }
+        }
         //CHECKS IF ANY SELECTION IS MADE ON THE IMAGE BODY
         boolean bodyCheck = false;
-        for(ToggleButton bodyBoxItem : tbArray){
-            if(bodyBoxItem.isChecked())
+        for (ToggleButton bodyBoxItem : tbArray) {
+            if (bodyBoxItem.isChecked())
                 bodyCheck = true;
         }
 
-        //if(ov_bodyText.getText().length()==0){
-        if(!bodyCheck){
-            ov_bodyText.setText("No Physical Pain");
+
+
+        if(bodTexts.isEmpty()) {  //if arrayList of selected body parts are empty
+            if(bodyCheck == false || noPainButtonClicked == true) { //No body parts are selected  or if no pain button is clicked
+                    ov_bodyText.setText("No Physical Pain");
+                }
+        }else {
+            if(ov_bodyText.getText().length()==0) {
+                listOfBodySelections = TextUtils.join(", ", bodTexts);
+                ov_bodyText.setText(listOfBodySelections);
+            }
+        }
+    }
+
+
+    /**
+     * Confirms that the thoughts section is filled out
+     *
+     * thoughtString = STRING FOR THOUGHTS
+     * @return true if completed
+     */
+    public boolean thoughtsComplete(){
+        if(ov_thoughtsWhat.getText().length()!=0 && ov_thoughtsWhyHow.getText().length()!=0 &&
+                ov_thoughtsFeel.getText().length()!=0){
+            thoughtString = ov_thoughtsWhat.getText().toString() + ". \n"
+                    + ov_thoughtsWhyHow.getText() + ". \n" + ov_thoughtsFeel.getText() + ".";
+            ov_thoughtsWhat.setText(thoughtString);
+            return true;
+        }else
+            return false;
+    }
+
+    public boolean moodComplete(){
+        if(ov_ImgView!=null){
+            return true;
+        }else
+            return false;
+    }
+
+    public boolean setComplete(){
+        if(eventNameEdit.getText().length()!=0 && thoughtsComplete()==true && moodComplete()==true){
+            return true;
         }else{
-            listOfBodySelections = TextUtils.join(", ", bodTexts);
-            ov_bodyText.setText(listOfBodySelections);
+            return false;
         }
     }
 
     @Override
     public void onClick(View v) {
 
+        ov_bodyText.setText("");
         bodTexts = null; bodTexts = new ArrayList<>();
         int buttonPressed = v.getId();
+
         if(buttonPressed==R.id.overviewButton||buttonPressed==R.id.thoughtsButton
                 || buttonPressed==R.id.bodyButton||buttonPressed==R.id.moodButton
                 || buttonPressed==R.id.SE_OVERVIEW_bodyPain || buttonPressed==R.id.SE_OVERVIEW_thoughts
                 || buttonPressed==R.id.SE_OVERVIEW_moodLayout){
-            moodLayout.setVisibility(View.INVISIBLE); thoughtsLayout.setVisibility(View.INVISIBLE);
+
+            if(!mood.isChecked()) {
+
+            }else{
+                moodLayout.setVisibility(View.INVISIBLE);
+                mood.setChecked(false);
+                Log.e("MOOD CHECKED?: " + mood.isChecked(), "WHAUHASJDKFHSLKDJFHLJSDHFHLJ");
+                mood.setBackgroundResource(R.drawable.del_button_border);
+            }
+             thoughtsLayout.setVisibility(View.INVISIBLE);
             bodyLayout.setVisibility(View.INVISIBLE); scroll_thoughts.setVisibility(View.INVISIBLE);
             scroll_overview.setVisibility(View.INVISIBLE);
             overview.setChecked(false); overview.setBackgroundResource(R.drawable.del_button_border);
-            mood.setChecked(false); mood.setBackgroundResource(R.drawable.del_button_border);
             thoughts.setChecked(false); thoughts.setBackgroundResource(R.drawable.del_button_border);
             body.setChecked(false); body.setBackgroundResource(R.drawable.del_button_border);
         }
@@ -273,10 +333,16 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         setOverviewDescriptions();
 
         switch (buttonPressed) {
+            case R.id.SE_OV_addEventButton:
+//                if(seComplete()){
+//                    Toast.makeText(context, "ADD COMPLETE NOT REALLY", Toast.LENGTH_SHORT).show();
+//                }else{
+//                    Toast.makeText(context, "ADD FAILED", Toast.LENGTH_SHORT).show();
+//                }
+                break;
             case R.id.overviewButton:
                 scroll_overview.setVisibility(View.VISIBLE);
                 overview.setChecked(true);
-                hideKeyboard();
                 overview.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.moodButton:
@@ -284,7 +350,9 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             case R.id.SE_OVERVIEW_moodLayout:
                 moodLayout.setVisibility(View.VISIBLE);
                 mood.setChecked(true);
-                hideKeyboard();
+                disableKeyboard(eventNameEdit);
+                Log.e("MOOD CHECKED?: " + mood.isChecked(), "WHAUHASJDKFHSLKDJFHLJSDHFHLJ");
+
                 mood.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.thoughtsButton:
@@ -292,14 +360,13 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 scroll_thoughts.setVisibility(View.VISIBLE);
                 thoughtsLayout.setVisibility(View.VISIBLE);
                 thoughts.setChecked(true);
-                hideKeyboard();
                 thoughts.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.bodyButton:
             case R.id.SE_OVERVIEW_bodyPain:
                 bodyLayout.setVisibility(View.VISIBLE);
                 body.setChecked(true);
-                hideKeyboard();
+                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
                 body.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case (R.id.ic_headButton):
@@ -310,6 +377,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     headButton.setChecked(true);
                     headButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     Log.e(headButton.getTextOff().toString(), "CHECK: "+headButton.isChecked());
+                    noPainButtonClicked = false;
                 }else{
                     img_headButton.setImageResource(R.drawable.head1);
                     img_headButton.setTag("head1");
@@ -325,6 +393,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     chestButton.setChecked(true);
                     chestButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     Log.e(chestButton.getTextOff().toString(), "CHECK: "+chestButton.isChecked());
+                    noPainButtonClicked = false;
                 }else{
                     img_chestButton.setImageResource(R.drawable.body1);img_chestButton.setTag("body1");
                     chestButton.setChecked(false);
@@ -340,6 +409,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     upArmButton.setChecked(true);
                     upArmButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     Log.e(upArmButton.getTextOff().toString(), "CHECK: "+upArmButton.isChecked());
+                    noPainButtonClicked = false;
                 }else{
                     img_upperLButton.setImageResource(R.drawable.upper_leftarm1);
                     img_upperLButton.setTag("upper_leftarm1");
@@ -357,6 +427,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     img_lowerRButton.setImageResource(R.drawable.lower_righthand2);img_lowerRButton.setTag("lower_righthand2");
                     handButton.setChecked(true);
                     handButton.setBackgroundResource(R.drawable.bodydel_button_border);
+                    noPainButtonClicked = false;
                     Log.e(handButton.getTextOff().toString(), "CHECK: "+handButton.isChecked());
                 }else{
                     img_lowerLButton.setImageResource(R.drawable.lower_lefthand1); img_lowerLButton.setTag("lower_lefthand1");
@@ -385,6 +456,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     legsButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     legsButton.setChecked(true);
                     Log.e(legsButton.getTextOff().toString(), "CHECK: "+legsButton.isChecked());
+                    noPainButtonClicked = false;
                 }else{
                     img_legButton.setImageResource(R.drawable.legs1); img_legButton.setTag("legs1");
                     legsButton.setBackgroundResource(R.drawable.body_button_border);
@@ -398,22 +470,63 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     feetButton.setBackgroundResource(R.drawable.bodydel_button_border);
                     feetButton.setChecked(true);
                     Log.e(feetButton.getTextOff().toString(), "CHECK: "+feetButton.isChecked());
+                    noPainButtonClicked = false;
                 }else{
                     img_feetButton.setImageResource(R.drawable.feet1); img_feetButton.setTag("feet1");
                     feetButton.setBackgroundResource(R.drawable.body_button_border);
                     feetButton.setChecked(false);
                 }
                 break;
-
+            case (R.id.noPainButton):
+                noPainButton();
+                break;
         }
     }
 
-    public boolean hideKeyboard() {
-        View focused = getCurrentFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(
-                Activity.INPUT_METHOD_SERVICE);
+
+    public void noPainButton(){
+        noPainButtonClicked = true;
+        img_headButton.setImageResource(R.drawable.head1);
+        img_headButton.setTag("head1");
+        headButton.setChecked(false);
+        headButton.setBackgroundResource(R.drawable.body_button_border);
+        img_chestButton.setImageResource(R.drawable.body1);img_chestButton.setTag("body1");
+        chestButton.setChecked(false);
+        chestButton.setBackgroundResource(R.drawable.body_button_border);
+        img_upperLButton.setImageResource(R.drawable.upper_leftarm1);
+        img_upperLButton.setTag("upper_leftarm1");
+        img_upperRButton.setImageResource(R.drawable.upper_rightarm1);
+        img_upperRButton.setTag("upper_rightarm1");
+        upArmButton.setChecked(false);
+        upArmButton.setBackgroundResource(R.drawable.body_button_border);
+        img_lowerLButton.setImageResource(R.drawable.lower_lefthand1); img_lowerLButton.setTag("lower_lefthand1");
+        img_lowerRButton.setImageResource(R.drawable.lower_righthand1); img_lowerRButton.setTag("lower_righthand1");
+        handButton.setChecked(false);
+        handButton.setBackgroundResource(R.drawable.body_button_border);
+        img_lowerBButton.setImageResource(R.drawable.lower_body1); img_lowerBButton.setTag("lower_body1");
+        lowBodButton.setBackgroundResource(R.drawable.body_button_border);
+        lowBodButton.setChecked(false);
+        img_legButton.setImageResource(R.drawable.legs1); img_legButton.setTag("legs1");
+        legsButton.setBackgroundResource(R.drawable.body_button_border);
+        legsButton.setChecked(false);
+        img_feetButton.setImageResource(R.drawable.feet1); img_feetButton.setTag("feet1");
+        feetButton.setBackgroundResource(R.drawable.body_button_border);
+        feetButton.setChecked(false);
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm!= null)
         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-        return true;
+    }
+
+    public static void disableKeyboard(EditText editText) {
+        if (Build.VERSION.SDK_INT >= 11) {
+            editText.setTextIsSelectable(true);
+        } else {
+            editText.setRawInputType(InputType.TYPE_NULL);
+            editText.setFocusable(true);
+        }
     }
 
 
