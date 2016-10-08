@@ -1,5 +1,7 @@
 package thinkfeelact.android.selfevaluationmodel.SelfEvaluationModel;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,9 +9,12 @@ import android.graphics.Color;
 import android.media.Rating;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,20 +26,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 public class SelfEvaluationActivity extends Activity implements View.OnClickListener{
 
     ToggleButton overview, mood, thoughts, body;
     Button addEvent, noPain;
-    String thoughtString;
+    String thoughtString, bodyString, moodString, eventName, ratingString;
     View overviewLayout, moodLayout, thoughtsLayout, bodyLayout, moodLayoutSection;
     View scroll_overview, scroll_thoughts;
     View SE_OVERVIEW_moodLayout, SE_OVERVIEW_bodyLayout, SE_OVERVIEW_thoughtsLayout;
@@ -89,9 +95,10 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         thoughtWhatEdit = (EditText) findViewById(R.id.SE_THOUGHTS_what);
         thoughtWhyHowEdit = (EditText) findViewById(R.id.SE_THOUGHTS_whyhow);
         thoughtFeelEdit = (EditText) findViewById(R.id.SE_THOUGHTS_feel);
-        eventNameEdit = (EditText) findViewById(R.id.editEvent);
+        eventNameEdit = (EditText) findViewById(R.id.SE_OV_editEventName);
 
         ov_ImgView = (ImageView) findViewById(R.id.SE_OVERVIEW_moodImgView);
+        ov_ImgView.setOnClickListener(this);
 
         SE_OVERVIEW_moodLayout = findViewById(R.id.SE_OVERVIEW_moodLayout);
         SE_OVERVIEW_bodyLayout = findViewById(R.id.SE_OVERVIEW_bodyPain);
@@ -119,6 +126,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         m15 = (ImageButton) findViewById(R.id.SE_MOOD_m15Button);
         m16 = (ImageButton) findViewById(R.id.SE_MOOD_m16Button);
         moodImgView = (ImageView) findViewById(R.id.SE_MOOD_imgView);
+
         moodTextView = (TextView) findViewById(R.id.SE_MOOD_moodView);
         m1.setOnClickListener(this);
         m2.setOnClickListener(this);
@@ -187,7 +195,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         //=========================RATING=====================================
         ratingBar = (RatingBar) findViewById(R.id.SE_OVERVIEW_StressRating);
         ratingText = (TextView) findViewById(R.id.ratingText);
-        ratingBar.setStepSize(1);
+        ratingBar.setStepSize(0.5f);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
 
             @Override
@@ -199,6 +207,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 else
                     ratingText.setTextColor(Color.parseColor("#40d973"));
                 ratingText.setText("Rating: " + rating);
+                ratingString = rating + "";
             }
         });
 
@@ -208,7 +217,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         }
 
         noPainButtonClicked = false;
-
+        initialiseKeyboards();
     }
 
 
@@ -220,9 +229,9 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
      */
     public void setOverviewDescriptions() {
         // SET WHAT, WHYHOW AND FEEL TEXTS TO OVERVIEW TEXT SECTION
-        ov_thoughtsWhat.setText("What happened: \n" + thoughtWhatEdit.getEditableText().toString());
-        ov_thoughtsWhyHow.setText("Why/How did it happen: \n" + thoughtWhyHowEdit.getEditableText().toString());
-        ov_thoughtsFeel.setText("How I am feeling: \n" + thoughtFeelEdit.getEditableText().toString());
+        ov_thoughtsWhat.setText(thoughtWhatEdit.getEditableText().toString());
+        ov_thoughtsWhyHow.setText(thoughtWhyHowEdit.getEditableText().toString());
+        ov_thoughtsFeel.setText(thoughtFeelEdit.getEditableText().toString());
 
 
         String listOfBodySelections;
@@ -237,17 +246,12 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                     bodTexts.remove(currentText);
             }
         }
-        //CHECKS IF ANY SELECTION IS MADE ON THE IMAGE BODY
-        boolean bodyCheck = false;
-        for (ToggleButton bodyBoxItem : tbArray) {
-            if (bodyBoxItem.isChecked())
-                bodyCheck = true;
-        }
+
 
 
 
         if(bodTexts.isEmpty()) {  //if arrayList of selected body parts are empty
-            if(bodyCheck == false || noPainButtonClicked == true) { //No body parts are selected  or if no pain button is clicked
+            if(!checkBodyClicked() && noPainButtonClicked == true) { //No body parts are selected  or if no pain button is clicked
                     ov_bodyText.setText("No Physical Pain");
                 }
         }else {
@@ -258,38 +262,107 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         }
     }
 
+    /**
+     * //CHECKS IF ANY SELECTION IS MADE ON BODY TAB
+     * @return true if any selection has been done on the physical pain layout
+     */
+    public boolean checkBodyClicked(){
+        boolean bodyCheck = false;
+        for (ToggleButton bodyBoxItem : tbArray) {
+            if (bodyBoxItem.isChecked())
+                bodyCheck = true;
+            else
+                bodyCheck = false;
+        }
+        return bodyCheck;
+    }
+
 
     /**
      * Confirms that the thoughts section is filled out
      *
-     * thoughtString = STRING FOR THOUGHTS
+     * thoughtString = STRING FOR THOUGHTS to be returned with add event button
      * @return true if completed
      */
-    public boolean thoughtsComplete(){
-        if(ov_thoughtsWhat.getText().length()!=0 && ov_thoughtsWhyHow.getText().length()!=0 &&
-                ov_thoughtsFeel.getText().length()!=0){
-            thoughtString = ov_thoughtsWhat.getText().toString() + ". \n"
-                    + ov_thoughtsWhyHow.getText() + ". \n" + ov_thoughtsFeel.getText() + ".";
-            ov_thoughtsWhat.setText(thoughtString);
+    public boolean thoughtsComplete() {
+        if (ov_thoughtsWhat.getText().length() != 0 && ov_thoughtsWhyHow.getText().length() != 0
+                && ov_thoughtsFeel.getText().length() != 0) {
             return true;
-        }else
-            return false;
-    }
-
-    public boolean moodComplete(){
-        if(ov_ImgView!=null){
-            return true;
-        }else
-            return false;
-    }
-
-    public boolean setComplete(){
-        if(eventNameEdit.getText().length()!=0 && thoughtsComplete()==true && moodComplete()==true){
-            return true;
-        }else{
+        } else{
             return false;
         }
     }
+
+    public boolean moodComplete(){
+        if(ov_moodText.getText().length() !=0){
+            return true;
+        }else
+            return false;
+    }
+
+    public boolean bodyComplete(){
+        if(ov_bodyText.getText().length()!=0){
+            return true;
+        }else
+            return false;
+    }
+
+
+    /**
+     * BOOLEAN CHECKING IF USER CAN ADD EVENT OR NOT ////////////////USE FOR DATABASE/////////////////////////////////////////////////
+     *
+     * eventName = value for name of event
+     * thoughtString = value for thoughts section
+     * bodyString = value for body section
+     * moodString = value for mood section
+     * ratingString = value for the stress rating
+     *
+     * @return
+     */
+    public boolean setComplete(){
+        String addMessage = "Added event";
+        eventName = eventNameEdit.getText().toString();
+        thoughtString = "What happened?: " + ov_thoughtsWhat.getText().toString() + ". \n"
+                + "Why/How did it happen" + ov_thoughtsWhyHow.getText() + ". \n" + "How do you feel" + ov_thoughtsFeel.getText() + ".";
+        bodyString = ov_bodyText.getText().toString();
+        moodString = ov_moodText.getText().toString();
+        //ratingString = use for stress value
+
+        /**
+         *  ================================DO DATABASE INSERTION HERE============================================================
+         */
+
+        //Returns true if body, mood, eventName and ratingString is not empty
+        if(thoughtsComplete() && moodComplete() && bodyComplete() && eventName.length()!=0 && ratingString!=null){
+            //Log testing - Displays in bright red text within -Android Monitor->Log Cat-
+            Log.e("COMPLETE", "ALL SET TO ADD EVENT");
+            Log.e("Event Name", eventName);
+            Log.e("Body", bodyString);
+            Log.e("Mood", moodString);
+            Log.e("thoughts", thoughtString);
+            Log.e("Rating", ratingString);
+            //End Log testing
+            Toast.makeText(this, addMessage, Toast.LENGTH_SHORT).show();
+            return true;
+        }else{
+            addMessage = "Please complete sections that are still highlighted red.";
+            Log.e("FAILED", "NOT READY TO ADD EVENT");
+            Log.e("Event Name", eventName);
+            Log.e("Body", bodyString);
+            Log.e("Mood", moodString);
+            Log.e("thoughts", thoughtString);
+            if(ratingString == null) {
+                Log.e("Rating", "NULL");
+                addMessage += "Please set a stress level for this event.";
+            }
+            Toast.makeText(this, addMessage, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    /**
+     * =============================================================================================================================
+     */
 
     @Override
     public void onClick(View v) {
@@ -301,22 +374,15 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         if(buttonPressed==R.id.overviewButton||buttonPressed==R.id.thoughtsButton
                 || buttonPressed==R.id.bodyButton||buttonPressed==R.id.moodButton
                 || buttonPressed==R.id.SE_OVERVIEW_bodyPain || buttonPressed==R.id.SE_OVERVIEW_thoughts
-                || buttonPressed==R.id.SE_OVERVIEW_moodLayout){
-
-            if(!mood.isChecked()) {
-
-            }else{
-                moodLayout.setVisibility(View.INVISIBLE);
-                mood.setChecked(false);
-                Log.e("MOOD CHECKED?: " + mood.isChecked(), "WHAUHASJDKFHSLKDJFHLJSDHFHLJ");
-                mood.setBackgroundResource(R.drawable.del_button_border);
-            }
-             thoughtsLayout.setVisibility(View.INVISIBLE);
+                || buttonPressed==R.id.SE_OVERVIEW_moodLayout || buttonPressed==R.id.SE_OVERVIEW_moodImgView){
+            moodLayout.setVisibility(View.INVISIBLE);
+            thoughtsLayout.setVisibility(View.INVISIBLE);
             bodyLayout.setVisibility(View.INVISIBLE); scroll_thoughts.setVisibility(View.INVISIBLE);
             scroll_overview.setVisibility(View.INVISIBLE);
             overview.setChecked(false); overview.setBackgroundResource(R.drawable.del_button_border);
             thoughts.setChecked(false); thoughts.setBackgroundResource(R.drawable.del_button_border);
             body.setChecked(false); body.setBackgroundResource(R.drawable.del_button_border);
+            mood.setChecked(false); mood.setBackgroundResource(R.drawable.del_button_border);
         }
 
 
@@ -332,13 +398,10 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         }
         setOverviewDescriptions();
 
+
         switch (buttonPressed) {
             case R.id.SE_OV_addEventButton:
-//                if(seComplete()){
-//                    Toast.makeText(context, "ADD COMPLETE NOT REALLY", Toast.LENGTH_SHORT).show();
-//                }else{
-//                    Toast.makeText(context, "ADD FAILED", Toast.LENGTH_SHORT).show();
-//                }
+                setComplete();
                 break;
             case R.id.overviewButton:
                 scroll_overview.setVisibility(View.VISIBLE);
@@ -346,13 +409,11 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
                 overview.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.moodButton:
-            case R.id.SE_OVERVIEW_moodImgView:
             case R.id.SE_OVERVIEW_moodLayout:
+            case R.id.SE_OVERVIEW_moodImgView:
+            case R.id.ov_moodSection:
                 moodLayout.setVisibility(View.VISIBLE);
                 mood.setChecked(true);
-                disableKeyboard(eventNameEdit);
-                Log.e("MOOD CHECKED?: " + mood.isChecked(), "WHAUHASJDKFHSLKDJFHLJSDHFHLJ");
-
                 mood.setBackgroundResource(R.drawable.sel_button_border);
                 break;
             case R.id.thoughtsButton:
@@ -480,6 +541,7 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
             case (R.id.noPainButton):
                 noPainButton();
                 break;
+
         }
     }
 
@@ -514,15 +576,22 @@ public class SelfEvaluationActivity extends Activity implements View.OnClickList
         feetButton.setChecked(false);
     }
 
-    public void hideKeyboard() {
+    public void hideKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(imm!= null)
-        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+        imm.hideSoftInputFromInputMethod(view.getWindowToken(), 0);
+    }
+
+    public void initialiseKeyboards(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(eventNameEdit, 0);
+        imm.showSoftInput(thoughtWhatEdit, 0);
+        imm.showSoftInput(thoughtWhyHowEdit, 0);
+        imm.showSoftInput(thoughtFeelEdit, 0);
     }
 
     public static void disableKeyboard(EditText editText) {
         if (Build.VERSION.SDK_INT >= 11) {
-            editText.setTextIsSelectable(true);
+            //editText.setTextIsSelectable(true);
         } else {
             editText.setRawInputType(InputType.TYPE_NULL);
             editText.setFocusable(true);

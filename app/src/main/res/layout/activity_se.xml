@@ -89,7 +89,7 @@
         <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/layout_thoughts"
+            layout="@layout/layout_thoughts_se"
             android:id="@+id/thoughtsLayout"
             android:layout_alignParentStart="true"
             android:visibility="invisible"
@@ -101,7 +101,7 @@
     <include
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        layout="@layout/layout_mood"
+        layout="@layout/layout_mood_se"
         android:id="@+id/moodLayout"
         android:visibility="invisible"
         android:layout_below="@+id/linearLayout6"
@@ -113,7 +113,7 @@
     <include
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        layout="@layout/layout_body"
+        layout="@layout/layout_body_se"
         android:id="@+id/bodyLayout"
         android:layout_below="@+id/linearLayout6"
         android:onClick="bodyFragment"
@@ -132,7 +132,7 @@
         <include
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            layout="@layout/layout_overview"
+            layout="@layout/layout_overview_se"
             android:id="@+id/overviewLayout"
             android:focusable="true" />
     </ScrollView>
